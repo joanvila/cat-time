@@ -1,0 +1,7 @@
+# Ignore build generated files
+
+!build/
+!build/*.pbw
+build/*
+
+.lock-waf_darwin_build

@@ -1,0 +1,29 @@
+{
+  "name": "cat-time",
+  "author": "Joan Vila",
+  "version": "1.0.0",
+  "keywords": ["pebble-app", "hora", "catala", "catalan", "temps"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "cat-time",
+    "uuid": "b5ec9912-b9a1-4766-85e8-c8ed7ec15826",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": []
+    }
+  }
+}
