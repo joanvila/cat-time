@@ -3,6 +3,21 @@
 static Window *s_window;
 static TextLayer *s_time_layer;
 
+static const char *textHours[] = {
+    "una",
+    "dues",
+    "tres",
+    "quatre",
+    "cinc",
+    "sis",
+    "set",
+    "vuit",
+    "nou",
+    "deu",
+    "onze",
+    "dotze"
+};
+
 static void prv_select_click_handler(ClickRecognizerRef recognizer, void *context) {
     text_layer_set_text(s_time_layer, "Select");
 }
@@ -21,18 +36,30 @@ static void prv_click_config_provider(void *context) {
     window_single_click_subscribe(BUTTON_ID_DOWN, prv_down_click_handler);
 }
 
+char* concat(const char *s1, const char *s2) {
+    const size_t len1 = strlen(s1);
+    const size_t len2 = strlen(s2);
+    char *result = malloc(len1 + len2 + 2);  //+2 for the zero-terminator and space between
+    memcpy(result, s1, len1);
+    memcpy(result + len1, " ", 1);
+    memcpy(result + len1 + 1, s2, len2 + 1);  //+1 to copy the null-terminator
+    return result;
+}
+
 static void update_time() {
     // Get a tm structure
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
+    int hour = tick_time->tm_hour % 12;
+    const char *textHour = textHours[hour - 1];
 
-    // Write the current hours and minutes into a buffer
-    static char s_buffer[8];
-    strftime(s_buffer, sizeof(s_buffer), clock_is_24h_style() ?
-        "%H:%M" : "%I:%M", tick_time);
+    const char *hourPrefix = "les";
+    if (hour == 1) {
+        hourPrefix = "la";
+    }
 
     // Display this time on the TextLayer
-    text_layer_set_text(s_time_layer, s_buffer);
+    text_layer_set_text(s_time_layer, concat(hourPrefix, textHour));
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -46,12 +73,12 @@ static void prv_window_load(Window *window) {
 
     // Create the text layer with specific bounds
     s_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(58, 52), bounds.size.w, 50));
+        GRect(0, PBL_IF_ROUND_ELSE(112, 120), bounds.size.w, 50));
 
     // Layout improvements
     text_layer_set_background_color(s_time_layer, GColorClear);
     text_layer_set_text_color(s_time_layer, GColorBlack);
-    text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
+    text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
     text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
 
     // Add it as a child of the Window's root layer
