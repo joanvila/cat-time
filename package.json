@@ -27,15 +27,15 @@
         {
           "type": "font",
           "characterRegex": "[a-z ']",
-          "name": "FONT_TIME_32",
-          "file": "fonts/Roboto-Condensed.ttf",
+          "name": "FONT_TIME_BOLD_20",
+          "file": "fonts/Roboto-BoldCondensed.ttf",
           "compatibility":"2.7"
         },
         {
           "type": "font",
           "characterRegex": "[a-z ']",
-          "name": "FONT_TIME_28",
-          "file": "fonts/Roboto-Condensed.ttf",
+          "name": "FONT_TIME_BOLD_24",
+          "file": "fonts/Roboto-BoldCondensed.ttf",
           "compatibility":"2.7"
         }
       ]

@@ -50,16 +50,16 @@ static void prv_window_load(Window *window) {
     GRect bounds = layer_get_bounds(window_layer);
 
     s_time_font = fonts_load_custom_font(
-        resource_get_handle(RESOURCE_ID_FONT_TIME_32));
+        resource_get_handle(RESOURCE_ID_FONT_TIME_BOLD_24));
     s_part_time_font = fonts_load_custom_font(
-        resource_get_handle(RESOURCE_ID_FONT_TIME_28));
+        resource_get_handle(RESOURCE_ID_FONT_TIME_BOLD_20));
 
     // Create the text layer with specific bounds
     s_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(112, 120), bounds.size.w, 50));
+        GRect(0, PBL_IF_ROUND_ELSE(115, 130), bounds.size.w, 50));
 
     s_part_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(87, 95), bounds.size.w, 50));
+        GRect(0, PBL_IF_ROUND_ELSE(90, 105), bounds.size.w, 50));
 
     // Layout improvements
     text_layer_set_background_color(s_time_layer, GColorClear);

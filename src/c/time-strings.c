@@ -12,11 +12,11 @@ char* concat(const char *s1, const char *s2) {
 
 char* hour_to_string(int hour, int min) {
     const char *textHour = stringHours[hour + 1];
-    if (min < 15) textHour = stringHours[hour];
+    if (min < 5) textHour = stringHours[hour];
 
     const char *hourPrefix = "";
 
-    if (min < 15) {
+    if (min < 5 || min >= 55) {
         if (hour == 1) {
             hourPrefix = "la ";
         } else {
@@ -34,16 +34,5 @@ char* hour_to_string(int hour, int min) {
 }
 
 const char* part_time_to_string(int hour, int min) {
-    const char *partTime = "";
-
-    if (min >= 15 && min < 30) {
-        partTime = stringHourParts[0];
-    } else if (min >= 30 && min < 45) {
-        partTime = stringHourParts[1];
-    } else if (min >= 45) {
-        partTime = stringHourParts[2];
-    }
-
-    return partTime;
+    return stringHourParts[min];
 }
-
