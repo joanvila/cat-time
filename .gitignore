@@ -7,3 +7,4 @@ build/*
 .lock-waf_darwin_build
 
 *.swp
+.DS_Store
