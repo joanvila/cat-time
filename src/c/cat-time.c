@@ -4,9 +4,14 @@
 static Window *s_window;
 static GFont s_time_font;
 static GFont s_part_time_font;
+static GFont s_weather_font;
 
 static TextLayer *s_time_layer;
 static TextLayer *s_part_time_layer;
+
+static TextLayer *s_weather_layer;
+
+static TextLayer *s_welcome_layer;
 
 /*
 static void prv_select_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -53,13 +58,22 @@ static void prv_window_load(Window *window) {
         resource_get_handle(RESOURCE_ID_FONT_TIME_BOLD_24));
     s_part_time_font = fonts_load_custom_font(
         resource_get_handle(RESOURCE_ID_FONT_TIME_BOLD_20));
+    s_weather_font = fonts_load_custom_font(
+        resource_get_handle(RESOURCE_ID_FONT_WEATHER_44));
 
     // Create the text layer with specific bounds
     s_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(115, 133), bounds.size.w, 35));
+        GRect(0, PBL_IF_ROUND_ELSE(133, 133), bounds.size.w, 35));
 
     s_part_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(90, 107), bounds.size.w, 30));
+        GRect(0, PBL_IF_ROUND_ELSE(107, 107), bounds.size.w, 30));
+
+    s_weather_layer = text_layer_create(
+        GRect(0, PBL_IF_ROUND_ELSE(40, 40), bounds.size.w, 50));
+
+    s_welcome_layer = text_layer_create(
+        GRect(0, PBL_IF_ROUND_ELSE(10, 10), bounds.size.w, 30));
+
 
     // Layout improvements
     text_layer_set_background_color(s_time_layer, GColorScreaminGreen);
@@ -72,17 +86,34 @@ static void prv_window_load(Window *window) {
     text_layer_set_font(s_part_time_layer, s_part_time_font);
     text_layer_set_text_alignment(s_part_time_layer, GTextAlignmentCenter);
 
+    text_layer_set_text_color(s_weather_layer, GColorBlack);
+    text_layer_set_font(s_weather_layer, s_weather_font);
+    text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
+    text_layer_set_text(s_weather_layer, "p");
+
+    text_layer_set_background_color(s_part_time_layer, GColorScreaminGreen);
+    text_layer_set_text_color(s_welcome_layer, GColorBlack);
+    text_layer_set_font(s_welcome_layer, s_part_time_font);
+    text_layer_set_text_alignment(s_welcome_layer, GTextAlignmentCenter);
+    text_layer_set_text(s_welcome_layer, "bon dia, joan");
+
+
     // Add it as a child of the Window's root layer
     layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
     layer_add_child(window_layer, text_layer_get_layer(s_part_time_layer));
+    layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
+    layer_add_child(window_layer, text_layer_get_layer(s_welcome_layer));
 }
 
 static void prv_window_unload(Window *window) {
     text_layer_destroy(s_time_layer);
     text_layer_destroy(s_part_time_layer);
+    text_layer_destroy(s_weather_layer);
+    text_layer_destroy(s_welcome_layer);
 
     fonts_unload_custom_font(s_time_font);
     fonts_unload_custom_font(s_part_time_font);
+    fonts_unload_custom_font(s_weather_font);
 }
 
 static void prv_init(void) {
