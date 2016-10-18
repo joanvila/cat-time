@@ -56,18 +56,18 @@ static void prv_window_load(Window *window) {
 
     // Create the text layer with specific bounds
     s_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(115, 130), bounds.size.w, 50));
+        GRect(0, PBL_IF_ROUND_ELSE(115, 133), bounds.size.w, 35));
 
     s_part_time_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(90, 105), bounds.size.w, 50));
+        GRect(0, PBL_IF_ROUND_ELSE(90, 107), bounds.size.w, 30));
 
     // Layout improvements
-    text_layer_set_background_color(s_time_layer, GColorClear);
+    text_layer_set_background_color(s_time_layer, GColorScreaminGreen);
     text_layer_set_text_color(s_time_layer, GColorBlack);
     text_layer_set_font(s_time_layer, s_time_font);
     text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
 
-    text_layer_set_background_color(s_part_time_layer, GColorClear);
+    text_layer_set_background_color(s_part_time_layer, GColorScreaminGreen);
     text_layer_set_text_color(s_part_time_layer, GColorBlack);
     text_layer_set_font(s_part_time_layer, s_part_time_font);
     text_layer_set_text_alignment(s_part_time_layer, GTextAlignmentCenter);
