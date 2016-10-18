@@ -72,7 +72,7 @@ static void prv_window_load(Window *window) {
         GRect(0, PBL_IF_ROUND_ELSE(40, 40), bounds.size.w, 50));
 
     s_welcome_layer = text_layer_create(
-        GRect(0, PBL_IF_ROUND_ELSE(10, 10), bounds.size.w, 30));
+        GRect(0, PBL_IF_ROUND_ELSE(0, 0), bounds.size.w, 30));
 
 
     // Layout improvements
@@ -89,9 +89,9 @@ static void prv_window_load(Window *window) {
     text_layer_set_text_color(s_weather_layer, GColorBlack);
     text_layer_set_font(s_weather_layer, s_weather_font);
     text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
-    text_layer_set_text(s_weather_layer, "p");
+    text_layer_set_text(s_weather_layer, "n");
 
-    text_layer_set_background_color(s_part_time_layer, GColorScreaminGreen);
+    text_layer_set_background_color(s_welcome_layer, GColorScreaminGreen);
     text_layer_set_text_color(s_welcome_layer, GColorBlack);
     text_layer_set_font(s_welcome_layer, s_part_time_font);
     text_layer_set_text_alignment(s_welcome_layer, GTextAlignmentCenter);
@@ -116,6 +116,33 @@ static void prv_window_unload(Window *window) {
     fonts_unload_custom_font(s_weather_font);
 }
 
+static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
+    static char temperature_buffer[8];
+    static char weather_buffer[8];
+
+    Tuple *temp_tuple = dict_find(iterator, MESSAGE_KEY_TEMPERATURE);
+    Tuple *weather_tuple = dict_find(iterator, MESSAGE_KEY_WEATHER);
+
+    if (temp_tuple && weather_tuple) {
+        snprintf(temperature_buffer, sizeof(temperature_buffer), "%dC", (int)temp_tuple->value->int32);
+        snprintf(weather_buffer, sizeof(weather_buffer), "%s", weather_tuple->value->cstring);
+
+        text_layer_set_text(s_weather_layer, weather_buffer);
+    }
+}
+
+static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+}
+
+static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
+}
+
+static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
+}
+
 static void prv_init(void) {
     s_window = window_create();
     //window_set_click_config_provider(s_window, prv_click_config_provider);
@@ -123,6 +150,17 @@ static void prv_init(void) {
         .load = prv_window_load,
         .unload = prv_window_unload,
     });
+
+    // Register callbacks
+    app_message_register_inbox_received(inbox_received_callback);
+    app_message_register_inbox_dropped(inbox_dropped_callback);
+    app_message_register_outbox_failed(outbox_failed_callback);
+    app_message_register_outbox_sent(outbox_sent_callback);
+
+    // Open AppMessage
+    const int inbox_size = 128;
+    const int outbox_size = 128;
+    app_message_open(inbox_size, outbox_size);
 
     const bool animated = true;
     window_stack_push(s_window, animated);
