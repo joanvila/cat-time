@@ -12,17 +12,23 @@ static TextLayer *s_part_time_layer;
 static TextLayer *s_weather_layer;
 
 static TextLayer *s_welcome_layer;
+static bool welcome_message_displayed = false;
 
 static void update_time() {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
-    int hour = tick_time->tm_hour % 12;
+    int hour = tick_time->tm_hour;
     int min = tick_time->tm_min;
 
     // Display this time on the TextLayer
-    text_layer_set_text(s_time_layer, hour_to_string(hour, min));
-    text_layer_set_text(s_part_time_layer, part_time_to_string(hour, min));
+    text_layer_set_text(s_time_layer, hour_to_string(hour%12, min));
+    text_layer_set_text(s_part_time_layer, part_time_to_string(hour%12, min));
+
+    if (min == 0 || !welcome_message_displayed)  {
+        text_layer_set_text(s_welcome_layer, welcome_message(hour));
+        if (!welcome_message_displayed) welcome_message_displayed = true;
+    }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -83,8 +89,6 @@ static void prv_window_load(Window *window) {
     text_layer_set_text_color(s_welcome_layer, GColorBlack);
     text_layer_set_font(s_welcome_layer, s_part_time_font);
     text_layer_set_text_alignment(s_welcome_layer, GTextAlignmentCenter);
-    text_layer_set_text(s_welcome_layer, "bon dia, joan");
-
 
     // Add it as a child of the Window's root layer
     layer_add_child(window_layer, text_layer_get_layer(s_time_layer));

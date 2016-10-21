@@ -81,3 +81,4 @@ static const char *stringHourParts[] = {
 char* concat(const char *s1, const char *s2);
 char* hour_to_string(int hour, int min);
 const char* part_time_to_string(int hour, int min);
+const char* welcome_message(int hour24);

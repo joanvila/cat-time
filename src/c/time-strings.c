@@ -36,3 +36,17 @@ char* hour_to_string(int hour, int min) {
 const char* part_time_to_string(int hour, int min) {
     return stringHourParts[min];
 }
+
+const char* welcome_message(int hour24) {
+    if (hour24 < 6) {
+        return "bona nit joan";
+    } else if (hour24 >= 6 && hour24 < 13) {
+        return "bon dia joan";
+    } else if (hour24 >= 13 && hour24 < 19) {
+        return "bona tarda joan";
+    } else if (hour24 >= 19 && hour24 < 23) {
+        return "bon vespre joan";
+    } else {
+        return "bona nit joan";
+    }
+}
