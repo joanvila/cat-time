@@ -13,27 +13,7 @@ static TextLayer *s_weather_layer;
 
 static TextLayer *s_welcome_layer;
 
-/*
-static void prv_select_click_handler(ClickRecognizerRef recognizer, void *context) {
-    text_layer_set_text(s_time_layer, "Select");
-}
-
-static void prv_up_click_handler(ClickRecognizerRef recognizer, void *context) {
-    text_layer_set_text(s_time_layer, "Up");
-}
-
-static void prv_down_click_handler(ClickRecognizerRef recognizer, void *context) {
-    text_layer_set_text(s_time_layer, "Down");
-}
-
-static void prv_click_config_provider(void *context) {
-    window_single_click_subscribe(BUTTON_ID_SELECT, prv_select_click_handler);
-    window_single_click_subscribe(BUTTON_ID_UP, prv_up_click_handler);
-    window_single_click_subscribe(BUTTON_ID_DOWN, prv_down_click_handler);
-}
-*/
 static void update_time() {
-    // Get a tm structure
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
@@ -132,8 +112,12 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     Tuple *weather_tuple = dict_find(iterator, MESSAGE_KEY_WEATHER);
 
     if (temp_tuple && weather_tuple) {
-        snprintf(temperature_buffer, sizeof(temperature_buffer), "%dC", (int)temp_tuple->value->int32);
-        snprintf(weather_buffer, sizeof(weather_buffer), "%s", weather_tuple->value->cstring);
+        snprintf(
+            temperature_buffer,
+            sizeof(temperature_buffer), "%dC", (int)temp_tuple->value->int32);
+        snprintf(
+            weather_buffer,
+            sizeof(weather_buffer), "%s", weather_tuple->value->cstring);
 
         text_layer_set_text(s_weather_layer, weather_buffer);
     }
@@ -153,7 +137,6 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
 
 static void prv_init(void) {
     s_window = window_create();
-    //window_set_click_config_provider(s_window, prv_click_config_provider);
     window_set_window_handlers(s_window, (WindowHandlers) {
         .load = prv_window_load,
         .unload = prv_window_unload,
